@@ -1,0 +1,6 @@
+flask
+flask-login
+flask-session
+flask_compress
+mysql-connector-python
+werkzeug==2.2.2
