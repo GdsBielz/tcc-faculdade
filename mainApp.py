@@ -4,7 +4,6 @@ from flask import Flask, redirect, render_template, request
 from flask_session import Session
 from flask_compress import Compress
 
-
 #Iniciando o flask
 app = Flask(__name__, static_url_path='', static_folder='static')
 Session(app)
