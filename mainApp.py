@@ -3,15 +3,15 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask, redirect, render_template, request
 from flask_session import Session
 from flask_compress import Compress
-
-
-#Teste ejiawjieawjijiawe
-
+from blueprints.auth import auth
+from blueprints.page import page
 
 #Iniciando o flask
 app = Flask(__name__, static_url_path='', static_folder='static')
-Session(app)
+#Session(app)
 Compress(app)
+app.register_blueprint(auth)
+app.register_blueprint(page)
 
 #Rotas para tratativa de erros
 @app.errorhandler(Exception)

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    {%for r in result%}
+        <h1>ID: {{r[0]}}</h1>
+        <h1>Nome: {{r[1]}}</h1>
+        <h1>Email: {{r[2]}}</h1>
+        <h1>Senha: {{r[3]}}</h1>
+    {%endfor%}
+</body>
+</html>
