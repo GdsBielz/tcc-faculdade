@@ -1,4 +1,5 @@
 #Imports
+from datetime import timedelta
 from werkzeug.exceptions import HTTPException
 from flask import Flask, redirect, render_template, request
 from flask_session import Session
@@ -8,7 +9,10 @@ from blueprints.page import page
 
 #Iniciando o flask
 app = Flask(__name__, static_url_path='', static_folder='static')
-#Session(app)
+app.secret_key = 'tccfacul2024'
+app.config["SESSION_TYPE"] = "filesystem"
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)  # 30 minutos de duração
+Session(app)
 Compress(app)
 app.register_blueprint(auth)
 app.register_blueprint(page)

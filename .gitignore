@@ -1,0 +1,22 @@
+# Arquivos temporários
+*~
+
+# Arquivos de log
+*.log
+
+#pycache
+*.pyc
+
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+
+# Pasta node_modules
+node_modules/
+
+flask_session/
+
+.vscode/
+
+.deployment

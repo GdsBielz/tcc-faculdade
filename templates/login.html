@@ -1,16 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
 </head>
 <body>
-    {%for r in result%}
-        <h1>ID: {{r[0]}}</h1>
-        <h1>Nome: {{r[1]}}</h1>
-        <h1>Email: {{r[2]}}</h1>
-        <h1>Senha: {{r[3]}}</h1>
-    {%endfor%}
+	<div class="container">
+		<div class="login-content">
+			<form action="/login" method="post">
+				<h2 class="title">BEM VINDO</h2>
+                <br>
+           		<div class="input-div one">
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   </div>
+           		   <div class="div">
+           		   		<input type="text" class="input" name='email' placeholder="E-mail" required>
+           		   </div>
+           		</div>
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<input type="password" class="input" name='password' placeholder="Senha" required>
+            	   </div>
+            	</div>
+
+            	<input type="submit" class="btn" value="Login">
+            </form>
+        </div>
+    </div>
 </body>
 </html>
