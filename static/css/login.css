@@ -1,12 +1,17 @@
-*{
-	padding: 0;
+body, html {
+	font-family: Arial, sans-serif;
+	background-color: #1a0933;
 	margin: 0;
-	box-sizing: border-box;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
 }
-
-body{
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+.page-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	height: 100%;
+	position: relative;
 }
 
 .container{
@@ -29,6 +34,7 @@ body{
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+	margin: 250px;
 }
 
 .img img{
@@ -45,7 +51,7 @@ form{
 
 .login-content h2{
 	margin: 15px 0;
-	color: #333;
+	color: #ffd700;
 	text-transform: uppercase;
 	font-size: 2.9rem;
 }
@@ -131,7 +137,7 @@ form{
 	background: none;
 	padding: 0.5rem 0.7rem;
 	font-size: 1.2rem;
-	color: #555;
+	color: white;
 	font-family: 'poppins', sans-serif;
 }
 
@@ -140,7 +146,6 @@ form{
 }
 
 a{
-	display: block;
 	text-align: right;
 	text-decoration: none;
 	color: #999;
@@ -159,7 +164,7 @@ a:hover{
 	border-radius: 25px;
 	outline: none;
 	border: none;
-	background-image: linear-gradient(to right, #0ebeff, #29b0f7,  #44a2ee);
+	background-image: linear-gradient(to right, #ffd700, #e0c110,  #bda521);
 	background-size: 200%;
 	font-size: 1.2rem;
 	color: #fff;
@@ -171,6 +176,26 @@ a:hover{
 }
 .btn:hover{
 	background-position: right;
+}
+.create-account {
+	color: white;
+	text-align: center;
+	margin-top: 1rem;
+}
+.create-account a {
+	color: #ffd700;
+	text-decoration: none;
+	font-weight: bold;
+}
+.circle {
+	position: absolute;
+	left: -15%;
+	top: -35%;
+	width: 900px;
+	height: 900px;
+	border: 110px dashed #3A2D9A;
+	border-radius: 50%;
+	z-index: 0;
 }
 
 
