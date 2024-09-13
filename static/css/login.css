@@ -187,15 +187,43 @@ a:hover{
 	text-decoration: none;
 	font-weight: bold;
 }
-.circle {
-	position: absolute;
-	left: -15%;
-	top: -35%;
-	width: 900px;
-	height: 900px;
-	border: 110px dashed #3A2D9A;
-	border-radius: 50%;
-	z-index: 0;
+@keyframes rotateCircle {
+	0% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(360deg);
+	}
+  }
+  @keyframes rotateCircle {
+	0% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(360deg);
+	}
+  }
+  
+  @keyframes breathEffect {
+	0%, 100% {
+	  border-color: rgba(58, 45, 154, 1);
+	}
+	50% {
+	  border-color: rgba(58, 45, 154, 0.5);
+	}
+  }
+  
+
+  .circle {
+    position: absolute;
+    left: -15%;
+    top: -45%;
+    width: 1000px;
+    height: 1000px;
+    border: 110px dashed #3A2D9A;
+    border-radius: 50%;
+    z-index: 0;
+    animation: rotateCircle 20s linear infinite, breathEffect 3s ease-in-out infinite;
 }
 
 
