@@ -1,7 +1,8 @@
 from functools import wraps
-from flask import Blueprint, abort, redirect, render_template, request, session, url_for
+import hashlib
+from flask import Blueprint, abort, jsonify, make_response, redirect, render_template, request, session, url_for
 
-from libs.sql import sqlSelect, sqlSelectDict
+from libs.sql import sqlExecute, sqlSelect, sqlSelectDict
 
 auth = Blueprint('auth', __name__)
 pageError = "pageError.html"
@@ -27,9 +28,8 @@ def login():
                 user = user[0]
 
             password = request.form.get("password")
-            # hash = hashlib.md5(password.encode())
-            # if user[3] != hash.hexdigest():
-            if user['senha'] != password:
+            hash = hashlib.md5(password.encode())
+            if user['senha'] != hash.hexdigest():
                 return render_template(pageError, message="Usuário ou senha incorreta!")
             elif user['senha'] == password:
                 session['loggedin'] = True
@@ -49,3 +49,40 @@ def login():
             return redirect("/home")
         else:
             return render_template('login.html')
+
+@auth.route("/cadastro", methods=["POST","GET"])
+def cadastro():
+    if request.method == 'GET':
+        try:
+            return render_template('cadastro.html')
+        except Exception as ex:
+            return make_response(ex, 400)
+    elif request.method == 'POST':
+        try:
+            nome = request.form.get("nome")
+            email = request.form.get("email")
+            senha = request.form.get("senha")
+
+            hash = hashlib.md5(senha.encode())
+            senha = hash.hexdigest()
+
+            #VERIFICA SE NÃO TEM USUÁRIO CADASTRADO
+
+            row = sqlSelectDict(""" SELECT email FROM usuarios WHERE email = %s """, (email,))
+
+            #SE VIER RESULTADO, EXISTE USUÁRIO COM ALGUM DADO IGUAL
+            if len(row) > 0:
+                row = row[0]
+                if row['email'] == email:
+                    message = "Email já cadastrado."
+
+                return make_response(jsonify(message=message), 400) 
+                
+            else:
+
+                sqlExecute(""" INSERT INTO usuarios (nome, email, senha, dataCadastro) VALUES(%s, %s, %s, NOW())
+                        """, (nome, email, senha))
+            
+            return make_response(jsonify(message="Cadastrado com sucesso!"), 200)
+        except Exception as ex:
+            return make_response(ex, 400)
