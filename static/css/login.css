@@ -218,8 +218,8 @@ a:hover{
     position: absolute;
     left: -15%;
     top: -45%;
-    width: 1000px;
-    height: 1000px;
+    width: 800px;
+    height: 800px;
     border: 110px dashed #3A2D9A;
     border-radius: 50%;
     z-index: 0;
@@ -228,9 +228,26 @@ a:hover{
 
 
 @media screen and (max-width: 1050px){
-	.container{
-		grid-gap: 5rem;
+	.circle{
+		display: none;
 	}
+
+	.login-content{
+		justify-content: center;
+		margin: 0;
+	}
+
+	.page-container {
+		justify-content: center;
+	}
+}
+
+@media screen and (max-width: 1360px){
+	.circle{
+		width: 600px;
+		height: 600px;
+	}
+
 }
 
 @media screen and (max-width: 1000px){
@@ -249,19 +266,45 @@ a:hover{
 }
 
 @media screen and (max-width: 900px){
-	.container{
-		grid-template-columns: 1fr;
-	}
-
-	.img{
-		display: none;
-	}
-
-	.wave{
+	.circle{
 		display: none;
 	}
 
 	.login-content{
+		justify-content: center;
+		margin: 0;
+	}
+
+	.page-container {
+		justify-content: center;
+	}
+}
+
+@media only screen and (max-width: 801px) {
+	.circle{
+		display: none;
+	}
+
+	.login-content{
+		justify-content: center;
+		margin: 0;
+	}
+
+	.page-container {
+		justify-content: center;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	.circle{
+		display: none;
+	}
+	.login-content{
+		justify-content: center;
+		margin: 0;
+	}
+
+	.page-container {
 		justify-content: center;
 	}
 }
