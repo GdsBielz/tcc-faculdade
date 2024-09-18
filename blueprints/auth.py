@@ -15,6 +15,11 @@ def login_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+@auth.route("/logout", methods=["GET"])
+def logout():
+    session['loggedin'] = False
+    return redirect(url_for('auth.login'))
+
 @auth.route("/login", methods=["POST","GET"])
 def login():
     if request.method == 'POST':
@@ -31,7 +36,7 @@ def login():
             hash = hashlib.md5(password.encode())
             if user['senha'] != hash.hexdigest():
                 return render_template(pageError, message="Usuário ou senha incorreta!")
-            elif user['senha'] == password:
+            elif user['senha'] == hash.hexdigest():
                 session['loggedin'] = True
                 session.permanent = True
                 session['user_nome'] = user['nome']

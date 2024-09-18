@@ -14,12 +14,15 @@ def login_required(func):
 @page.route("/")
 def raiz():
     logado = session.get("loggedin")
-    if logado:
-        return redirect("/home")
-    else:
-        return redirect("/login")
+    return redirect("/home") if logado else redirect("/landing-page")
+        
 
 @page.route("/home")
 @login_required
 def home():
     return render_template("home.html")
+
+
+@page.route("/landing-page")
+def landingPage():
+    return render_template("landingPage.html")
