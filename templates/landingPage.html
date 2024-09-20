@@ -8,23 +8,105 @@
     <script src="https://kit.fontawesome.com/30e321151d.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <img src="/images/financeiro.jpg" alt="Logo" width="40" height="40">
-                NOME DO APP
+
+      <header>
+        <div class="logo">
+            <img src="/images/financeiro.jpg" alt="Logo" width="40" height="40">
+            NOME DO APP
+        </div>
+        <nav>
+            <ul>
+              <li><a href="#section1">Inicio</a></li>
+              <li><a href="#section2">Quem somos</a></li>
+              <li><a href="#section3">Por que nos escolhem</a></li>
+            </ul>
+          </nav>
+        <button class="enter-btn"><a style="text-decoration: none;" href="/login">ENTRAR <i class="fa-solid fa-right-to-bracket" style="color: #1a0b2e;"></i></a></button>
+    </header>
+
+      <section id="section1" class="section1"> <!-- Página 1 -->
+        <div class="container">
+
+            <main class="main-content">
+                <div class="text-content">
+                    <span class="tag">#Soluçãofinanceira</span>
+                    <h1>Bem-vindo ao [Nome do App]</h1>
+                    <p>Gerenciar suas finanças é essencial para o sucesso como motorista de aplicativo. Com o [Nome do App], você tem ferramentas fáceis para acompanhar receitas e despesas, otimizar seus ganhos e planejar seu futuro financeiro com mais segurança.</p>
+                    <p>Entre e descubra como simplificar sua gestão financeira!</p>
+                </div>
+                <div class="image-container"></div>
+            </main>
+        </div>
+      </section>
+        <section id="section2" class="section2"> <!-- Página 2 -->
+            <div class="container">
+                <h1>Quem somos?</h1>
+                <div class="content">
+                    <p>Gerenciar suas finanças é essencial para o sucesso como motorista de aplicativo. Com o [Nome do App], você tem ferramentas fáceis para acompanhar receitas e despesas, otimizar seus ganhos e planejar seu futuro financeiro com mais segurança.</p>
+                    <p>Entre e descubra como simplificar sua gestão financeira!</p>
+                    <div class="logo">
+                        UniFECAF
+                        <div class="slogan">Seu sonho, nossa meta!</div>
+                    </div>
+                </div>
+
             </div>
-            <button class="enter-btn"><a style="text-decoration: none;" href="/login">ENTRAR <i class="fa-solid fa-right-to-bracket" style="color: #1a0b2e;"></i></a></button>
-        </header>
-        <main class="main-content">
-            <div class="text-content">
-                <span class="tag">#Soluçãofinanceira</span>
-                <h1>Bem-vindo ao [Nome do App]</h1>
-                <p>Gerenciar suas finanças é essencial para o sucesso como motorista de aplicativo. Com o [Nome do App], você tem ferramentas fáceis para acompanhar receitas e despesas, otimizar seus ganhos e planejar seu futuro financeiro com mais segurança.</p>
-                <p>Entre e descubra como simplificar sua gestão financeira!</p>
+        </section>
+
+        <section id="section3" class="section3"> <!-- Página 3 -->
+            <h1>Porque nos ecolhem.</h1>
+            <div class="container">
+                <div class="testimonials">
+                    <div class="testimonial">
+                        <q>Muito Bomm</q>
+                        <p>Conseguir organizar minhas finanças imediatamente a cada corrida é perfeito.</p>
+                        <div class="stars">★★★★★</div>
+                        <div class="user">
+                            <img src="/api/placeholder/50/50" alt="Gabriel Sales" />
+                            <div class="user-info">
+                                <div class="name">Gabriel Sales</div>
+                                <div>Motorista de aplicativo</div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="testimonial">
+                        <q>Ajuda muito</q>
+                        <p>Não tenho mais gastos desnecessários agora sei em tempo real o quanto entra e o quanto sai da minha conta..</p>
+                        <div class="stars">★★★★★</div>
+                        <div class="user">
+                            <img src="/api/placeholder/50/50" alt="Mateus Nunes" />
+                            <div class="user-info">
+                                <div class="name">Mateus Nunes</div>
+                                <div>Taxista</div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="testimonial">
+                        <q>Arassou!</q>
+                        <p>Eu faço serviços de entrega com meu caminhão e adivinha serve pra mim também...</p>
+                        <div class="stars">★★★★★</div>
+                        <div class="user">
+                            <img src="/api/placeholder/50/50" alt="Wesley" />
+                            <div class="user-info">
+                                <div class="name">Wesley</div>
+                                <div>Carreteiro</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="image-container"></div>
-        </main>
-    </div>
+        </section>
 </body>
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+</script>
 </html>
