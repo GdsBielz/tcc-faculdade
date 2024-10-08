@@ -18,10 +18,36 @@ def raiz():
         
 
 @page.route("/home")
-@login_required
+# @login_required
 def home():
     return render_template("home.html")
 
+@page.route("/caixa")
+# @login_required
+def caixa():
+    return render_template("caixa.html")
+
+@page.route("/metas")
+# @login_required
+def metas():
+    return render_template("metas.html")
+
+
+@page.route("/dashboard")
+# @login_required
+def dashboard():
+    return render_template("dashboard.html")
+
+
+@page.route("/conta")
+# @login_required
+def conta():
+    return render_template("conta.html")
+
+@page.route("/configuracoes")
+# @login_required
+def configuracoes():
+    return render_template("configuracoes.html")
 
 @page.route("/landing-page")
 def landingPage():
