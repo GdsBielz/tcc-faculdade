@@ -6,7 +6,12 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-y: scroll
+}
 body {
     display: flex;
     min-height: 100vh;
@@ -18,6 +23,110 @@ main {
     z-index: 1;
     padding-left: 52px;
     color: white;
+    width: 90%;
+}
+
+.situacaoAtual, .ultimaCorrida{
+    display: flex;
+    background-color: #252525;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 45%
+}
+
+.situacaoAtualText, .ultimaCorridaText{
+    margin-right: 10px;
+}
+
+.duasDiv{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 15vh;
+}
+
+.valor span{
+    font-size: 25px; 
+    font-weight: 600;
+}
+
+.metade1{
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+}
+
+.metade1.sidebar-open{
+    width: 70%;
+}
+.metade2{
+    width: 40%;
+}
+
+.divMestre{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.saldo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #4f46e5;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 100%;
+    height: 20vh
+}
+
+.valorSaldoEscondido{
+    display: none;
+}
+
+.valorSaldo, .valorSaldoEscondido{
+    margin-top: 10px;
+    font-size: 25px;
+}
+
+.valor{
+    display: flex;
+    flex-direction: column;
+}
+
+.eye-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.ultimosLancamentos{
+    display: flex;
+    background-color: #252525;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 100%;
+    height: 40vh;
+}
+
+.historicoKM{
+    display: flex;
+    background-color: #252525;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 100%;
+    height: 20vh;
+}
+
+.grenn{
+    color: #00BF63;
+}
+.red{
+    color: #F85050;
 }
 
 #sidebar {
@@ -108,6 +217,7 @@ main {
     padding: 12px;
 }
 
+
 #logout_btn {
     border: none;
     padding: 12px;
@@ -165,4 +275,82 @@ main {
 #sidebar.open-sidebar .side-item a {
     justify-content: flex-start;
     gap: 14px;
+}
+
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+    .text-content {
+        padding-right: 0;
+        margin-bottom: 30px;
+    }
+    .image-content {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 1360px){
+
+
+}
+
+@media screen and (max-width: 1050px){
+
+}
+
+
+@media screen and (max-width: 1000px){
+
+}
+
+@media screen and (max-width: 900px){
+
+}
+
+@media only screen and (min-width: 600px) {
+    .situacaoAtualText, .ultimaCorridaText{
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .divMestre{
+        flex-direction: column-reverse;
+    }
+
+    .situacaoAtual, .ultimaCorrida{
+        display: flex;
+        background-color: #252525;
+        border-radius: 18px;
+        padding: 20px;
+        margin-top: 30px;
+        width: 100%
+    }
+
+    .ultimaCorrida{
+        display: none;
+    }
+    
+
+    .metade1,.metade2{
+        width: 100%;
+    }
+    .saldo{
+        width: 100%;
+        height: 11vh;
+    }
+
+    .valor span{
+        font-size: 20px;
+    }
+
+    .valorSaldo{
+        margin-top: 0;
+    }
+
+    .ultimosLancamentos{
+        height: 30vh;
+    }
 }

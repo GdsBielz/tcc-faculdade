@@ -13,7 +13,6 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    margin-top: 70px;
 
 }
 header {
@@ -34,6 +33,7 @@ header {
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
 }
 .main-content {
     display: flex;
@@ -94,11 +94,10 @@ p {
 }
 
 header {
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #3f2182;
+    background-color: transparent;
     padding: 10px;
     text-align: center;
     z-index: 1;
@@ -117,6 +116,9 @@ header {
   header ul li a {
     color: white;
     text-decoration: none;
+    background-color: #2c1155;
+    padding: 10px;
+    border-radius: 10px;
   }
   
   .section1 {
@@ -148,7 +150,6 @@ p {
     margin-bottom: 15px;
 }
 .logo {
-    margin-top: 20px;
     font-size: 1.5em;
     color: #8a7b9d;
 }

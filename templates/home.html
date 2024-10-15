@@ -1,5 +1,67 @@
 {% extends 'base.html' %}
 
 {% block body %}
-Home
+<h2>Olá!, {nome_usuario}!</h2>
+
+<div class="divMestre">
+    <div class="metade1", id="metade1">
+        <div class="duasDiv">
+            <div class="situacaoAtual"><span class="situacaoAtualText">Situação atual:</span> <span class="grenn">Você está indo bem!</span></div>
+            <div class="ultimaCorrida"><span class="ultimaCorridaText">Última corrida:</span> <b>15/10/2024 ás 15:00</b></div>
+        </div>
+        
+        
+        <div class="ultimosLancamentos">
+            <span class="ultimosLancamentosText">Últimos lançamentos</span>
+        
+        </div>
+        
+        <div class="historicoKM">Histórico de KM</div>
+    </div>
+    
+    <div class="metade2">
+        <div class="saldo">
+            <div class="valor">
+                <span >Saldo:</span>
+                <div class="valorSaldo" id="valorSaldo">R$200,00</div>
+                <div class="valorSaldoEscondido" id="valorSaldoEscondido">*****</div>
+            </div>
+            <div class="opcoes">
+                <span class="eye-icon" id="eyeIcon"><i class="fa-regular fa-eye" style="color: #ffffff;"></i></span>
+            </div>
+            
+        </div>
+        
+    </div>
+
+</div>
+
+<script>
+    let mostrarSaldo = true;
+    const valorSaldo = document.getElementById('valorSaldo');
+    const valorSaldoEscondido = document.getElementById('valorSaldoEscondido');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    eyeIcon.addEventListener('click', () => {
+        mostrarSaldo = !mostrarSaldo;
+        console.log(mostrarSaldo)
+        if (mostrarSaldo) {
+            valorSaldoEscondido.style.display = 'none'
+            valorSaldo.style.display = 'block'
+            eyeIcon.innerHTML = `<i class="fa-regular fa-eye" style="color: #ffffff;"></i>`
+        } else {
+            valorSaldoEscondido.style.display = 'block'
+            valorSaldo.style.display = 'none'
+            eyeIcon.innerHTML = `<i class="fa-regular fa-eye-slash" style="color: #ffffff;"></i>` // Ícone de olho fechado
+        }
+    });
+
+
+    const content = document.getElementById('metade1');
+    const toggleButton = document.getElementById('open_btn');
+
+    toggleButton.addEventListener('click', () => {
+        content.classList.toggle('sidebar-open');
+    });
+</script>
 {% endblock %}
