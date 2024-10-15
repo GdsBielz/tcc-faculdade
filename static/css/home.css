@@ -31,8 +31,8 @@ main {
     background-color: #252525;
     border-radius: 18px;
     padding: 20px;
-    margin-top: 30px;
-    width: 45%
+    width: 50%;
+    height: 14vh;
 }
 
 .situacaoAtualText, .ultimaCorridaText{
@@ -43,7 +43,6 @@ main {
     display: flex;
     flex-direction: row;
     gap: 20px;
-    height: 15vh;
 }
 
 .valor span{
@@ -55,6 +54,7 @@ main {
     display: flex;
     flex-direction: column;
     width: 65%;
+
 }
 
 .metade1.sidebar-open{
@@ -62,12 +62,18 @@ main {
 }
 .metade2{
     width: 40%;
+    
+}
+
+.metade1, .metade2{
+    margin-top: 20px;
+    gap: 20px;
 }
 
 .divMestre{
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 15px;
 }
 
 .saldo{
@@ -77,7 +83,6 @@ main {
     background-color: #4f46e5;
     border-radius: 18px;
     padding: 20px;
-    margin-top: 30px;
     width: 100%;
     height: 20vh
 }
@@ -104,12 +109,12 @@ main {
 
 .ultimosLancamentos{
     display: flex;
+    flex-direction: column;
     background-color: #252525;
     border-radius: 18px;
     padding: 20px;
-    margin-top: 30px;
     width: 100%;
-    height: 40vh;
+    height: 42vh;
 }
 
 .historicoKM{
@@ -117,12 +122,11 @@ main {
     background-color: #252525;
     border-radius: 18px;
     padding: 20px;
-    margin-top: 30px;
     width: 100%;
     height: 20vh;
 }
 
-.grenn{
+.green{
     color: #00BF63;
 }
 .red{
@@ -278,6 +282,22 @@ main {
 }
 
 
+.tabelaLancamentos {
+    width: 100%;
+    background-color: #252525;
+    color: white;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.tabelaLancamentos th, .tabelaLancamentos td {
+    padding: 6px;
+    border: none;
+    text-align: left;
+}
+.tabelaLancamentos th {
+    background-color: #333;
+}
+
 @media (max-width: 768px) {
     .main-content {
         flex-direction: column;
@@ -325,7 +345,6 @@ main {
         background-color: #252525;
         border-radius: 18px;
         padding: 20px;
-        margin-top: 30px;
         width: 100%
     }
 

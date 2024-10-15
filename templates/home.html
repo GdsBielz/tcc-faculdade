@@ -1,39 +1,67 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h2>Olá!, {nome_usuario}!</h2>
+<h2>Olá!, {{ nome_usuario }}!</h2>
 
 <div class="divMestre">
-    <div class="metade1", id="metade1">
+    <div class="metade1" id="metade1">
         <div class="duasDiv">
-            <div class="situacaoAtual"><span class="situacaoAtualText">Situação atual:</span> <span class="grenn">Você está indo bem!</span></div>
-            <div class="ultimaCorrida"><span class="ultimaCorridaText">Última corrida:</span> <b>15/10/2024 ás 15:00</b></div>
+            <div class="situacaoAtual"><span class="situacaoAtualText">Situação atual:</span> <span class="green">Você está indo bem!</span></div>
+            <div class="ultimaCorrida"><span class="ultimaCorridaText">Última corrida:</span> <b>15/10/2024 às 15:00</b></div>
         </div>
-        
         
         <div class="ultimosLancamentos">
             <span class="ultimosLancamentosText">Últimos lançamentos</span>
-        
+
+            <!-- Tabela adicionada -->
+            <table class="tabelaLancamentos">
+                <thead>
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Pagamento</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lanche</td>
+                        <td>Crédito</td>
+                        <td class="red">- R$ 20,00</td>
+                    </tr>
+                    <tr>
+                        <td>Pedágio</td>
+                        <td>Dinheiro</td>
+                        <td class="red">- R$ 10,00</td>
+                    </tr>
+                    <tr>
+                        <td>Gasolina</td>
+                        <td>Débito</td>
+                        <td class="red">- R$ 50,00</td>
+                    </tr>
+                    <tr>
+                        <td>Corrida</td>
+                        <td>PIX</td>
+                        <td class="green">+ R$ 25,00</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        
+
         <div class="historicoKM">Histórico de KM</div>
     </div>
     
     <div class="metade2">
         <div class="saldo">
             <div class="valor">
-                <span >Saldo:</span>
+                <span>Saldo:</span>
                 <div class="valorSaldo" id="valorSaldo">R$200,00</div>
                 <div class="valorSaldoEscondido" id="valorSaldoEscondido">*****</div>
             </div>
             <div class="opcoes">
                 <span class="eye-icon" id="eyeIcon"><i class="fa-regular fa-eye" style="color: #ffffff;"></i></span>
             </div>
-            
         </div>
-        
     </div>
-
 </div>
 
 <script>
@@ -44,18 +72,16 @@
 
     eyeIcon.addEventListener('click', () => {
         mostrarSaldo = !mostrarSaldo;
-        console.log(mostrarSaldo)
         if (mostrarSaldo) {
-            valorSaldoEscondido.style.display = 'none'
-            valorSaldo.style.display = 'block'
-            eyeIcon.innerHTML = `<i class="fa-regular fa-eye" style="color: #ffffff;"></i>`
+            valorSaldoEscondido.style.display = 'none';
+            valorSaldo.style.display = 'block';
+            eyeIcon.innerHTML = `<i class="fa-regular fa-eye" style="color: #ffffff;"></i>`;
         } else {
-            valorSaldoEscondido.style.display = 'block'
-            valorSaldo.style.display = 'none'
-            eyeIcon.innerHTML = `<i class="fa-regular fa-eye-slash" style="color: #ffffff;"></i>` // Ícone de olho fechado
+            valorSaldoEscondido.style.display = 'block';
+            valorSaldo.style.display = 'none';
+            eyeIcon.innerHTML = `<i class="fa-regular fa-eye-slash" style="color: #ffffff;"></i>`;
         }
     });
-
 
     const content = document.getElementById('metade1');
     const toggleButton = document.getElementById('open_btn');
@@ -64,4 +90,10 @@
         content.classList.toggle('sidebar-open');
     });
 </script>
+
+<!-- Estilos adicionais para a tabela -->
+<style>
+
+</style>
+
 {% endblock %}
