@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crie uma Conta</title>
     <link rel="stylesheet" type="text/css" href="/css/cadastro.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/cadastro.js"></script>
+    
 </head>
 <body>
     <div class="container">
         <h1>CRIE UMA CONTA</h1>
-        <form action="/cadastro" method="post">
-            <input type="text" name="nome" placeholder="Nome Completo" required>
-            <input type="email" name="email" placeholder="E-mail" required>
-            <input type="password" name="senha" placeholder="Senha" required>
+        <div class="form">
+            <input id="nomeInput" type="text" name="nome" placeholder="Nome Completo" required>
+            <input id="emailInput" type="email" name="email" placeholder="E-mail" required>
+            <input id="passwordInput" type="password" name="senha" placeholder="Senha" required>
             <div class="checkbox-container">
                 <input type="checkbox" id="terms" required>
                 <label for="terms">Ao pressionar "Concordar e Continuar", você confirma que leu e concorda com os termos de uso e conhece nossa política de privacidade.</label>
@@ -21,8 +24,8 @@
                 <input type="checkbox" id="marketing">
                 <label for="marketing">Sim, gostaria de receber comunicações de marketing, atualizações, ofertas especiais e outras informações da (NOME). Posso cancelar a qualquer momento.</label>
             </div>
-            <button type="submit">CONCORDAR E CONTINUAR</button>
-        </form>
+            <button id="concluirCadastroBtn">CONCORDAR E CONTINUAR</button>
+        </div>
     </div>
 </body>
 </html>

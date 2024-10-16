@@ -6,11 +6,11 @@ import mysql.connector
 def connect():
     try:
         mySQLConnection = {
-            'host': 'engenharia-tcc.c7k8ci6qg68l.us-east-2.rds.amazonaws.com',  # Endereço do servidor MySQL
-            'user': 'usuariotodos',  # Nome de usuário do MySQL
-            'password': 'eLoGgDoGPYNLKmNpwcnc',  # Senha do MySQL
-            'database': 'tccfacul',  # Nome do banco de dados
-            'port': 3306  # Porta do MySQL (padrão é 3306)
+            'host': 'classify.ecoloop.com.br',  # Endereço do servidor MySQL
+            'user': 'root',  # Nome de usuário do MySQL
+            'password': 'Gsilva@2022',  # Senha do MySQL
+            'database': 'test',  # Nome do banco de dados
+            'port': 18088  # Porta do MySQL (padrão é 3306)
         }
         return mysql.connector.connect(**mySQLConnection)
     except Exception as ex:

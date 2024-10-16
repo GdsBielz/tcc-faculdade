@@ -28,22 +28,22 @@ def login():
             user = sqlSelectDict("SELECT * FROM usuarios WHERE email = %s", (email,))
 
             if user is None or len(user) == 0:
-                return render_template(pageError, message="Usuário não existe!")
+                return make_response(jsonify(message="Usuário ou senha invalidos."), 400)
             else:
                 user = user[0]
 
             password = request.form.get("password")
             hash = hashlib.md5(password.encode())
             if user['senha'] != hash.hexdigest():
-                return render_template(pageError, message="Usuário ou senha incorreta!")
+                return make_response(jsonify(message="Usuário ou senha invalidos."), 400)
             elif user['senha'] == hash.hexdigest():
                 session['loggedin'] = True
                 session.permanent = True
                 session['user_nome'] = user['nome']
                 session['user_email'] = user['email']
-                return redirect('/home')
+                return make_response(jsonify(login=True), 200)
             else:
-                return render_template(pageError, message="Usuário inativo!")
+                return make_response(jsonify(message="Erro interno, contate o suporte."), 400)
 
         except Exception as ex:
             abort(500, str(ex))
@@ -64,9 +64,9 @@ def cadastro():
             return make_response(ex, 400)
     elif request.method == 'POST':
         try:
-            nome = request.form.get("nome")
-            email = request.form.get("email")
-            senha = request.form.get("senha")
+            nome = request.json["nome"]
+            email = request.json["email"]
+            senha = request.json["password"]
 
             hash = hashlib.md5(senha.encode())
             senha = hash.hexdigest()
@@ -81,7 +81,7 @@ def cadastro():
                 if row['email'] == email:
                     message = "Email já cadastrado."
 
-                return make_response(jsonify(message=message), 400) 
+                return make_response(jsonify(message=message), 400)
                 
             else:
 
