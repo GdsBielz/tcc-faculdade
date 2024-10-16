@@ -194,6 +194,50 @@ h1 {
     font-weight: bold;
 }
 
+/* Estilos para o menu no desktop */
+nav ul {
+    display: flex;
+    gap: 20px;
+}
+
+/* Esconder o menu no celular */
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    width: 100%;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu.open {
+    display: flex;
+}
+
+/* Ícone de menu hambúrguer */
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+    }
+
+    .logo img{
+        display: none;
+    }
+    .menuSuperior{
+        display: none;
+    }
+}
+
   
 @media (max-width: 768px) {
     .main-content {
