@@ -18,5 +18,3 @@ node_modules/
 flask_session/
 
 .vscode/
-
-.deployment
