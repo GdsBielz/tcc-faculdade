@@ -11,6 +11,23 @@ def login_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+def getUsername(completo=False):
+    nomeUsuario = session['user_nome']
+    if nomeUsuario is not None:
+        if completo:
+            return nomeUsuario
+        else:
+            partesNome = nomeUsuario.split(" ")
+
+            if len(partesNome) >= 2:
+                nomeUsuario = partesNome[0]
+                return nomeUsuario
+            else:
+                # Se não houver sobrenome, retorna o nome completo
+                return nomeUsuario
+    else:
+        return "Usuário"
+
 @page.route("/")
 def raiz():
     logado = session.get("loggedin")
@@ -20,34 +37,41 @@ def raiz():
 @page.route("/home")
 @login_required
 def home():
-    return render_template("home.html")
+    nomeUsuario = getUsername()
+    return render_template("home.html", nomeUsuario=nomeUsuario)
 
 @page.route("/caixa")
 @login_required
 def caixa():
-    return render_template("caixa.html")
+    nomeUsuario = getUsername()
+    return render_template("caixa.html", nomeUsuario=nomeUsuario)
 
 @page.route("/metas")
 @login_required
 def metas():
-    return render_template("metas.html")
+    nomeUsuario = getUsername()
+    return render_template("metas.html", nomeUsuario=nomeUsuario)
 
 
 @page.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    nomeUsuario = getUsername()
+    return render_template("dashboard.html", nomeUsuario=nomeUsuario)
 
 
 @page.route("/conta")
 @login_required
 def conta():
-    return render_template("conta.html")
+    nomeUsuario = getUsername()
+    emailUsuario = session.get("user_email")
+    return render_template("conta.html", nomeUsuario=nomeUsuario, emailUsuario = emailUsuario)
 
 @page.route("/configuracoes")
 @login_required
 def configuracoes():
-    return render_template("configuracoes.html")
+    nomeUsuario = getUsername()
+    return render_template("configuracoes.html", nomeUsuario=nomeUsuario)
 
 @page.route("/landing-page")
 def landingPage():

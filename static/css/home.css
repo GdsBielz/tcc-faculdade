@@ -19,7 +19,7 @@ body {
 }
 
 main {
-    padding: 20px;
+    margin-top: 30px;
     z-index: 1;
     padding-left: 52px;
     color: white;
@@ -298,78 +298,111 @@ main {
     background-color: #333;
 }
 
+/* Responsividade para dispositivos menores */
 @media (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
-    }
-    .text-content {
-        padding-right: 0;
-        margin-bottom: 30px;
-    }
-    .image-content {
-        text-align: center;
-    }
-}
-
-@media screen and (max-width: 1360px){
-
-
-}
-
-@media screen and (max-width: 1050px){
-
-}
-
-
-@media screen and (max-width: 1000px){
-
-}
-
-@media screen and (max-width: 900px){
-
-}
-
-@media only screen and (min-width: 600px) {
-    .situacaoAtualText, .ultimaCorridaText{
-        display: block;
-    }
-}
-
-@media only screen and (max-width: 768px) {
-    .divMestre{
+    .divMestre {
         flex-direction: column-reverse;
     }
 
-    .situacaoAtual, .ultimaCorrida{
-        display: flex;
-        background-color: #252525;
-        border-radius: 18px;
-        padding: 20px;
-        width: 100%
-    }
-
-    .ultimaCorrida{
-        display: none;
-    }
-    
-
-    .metade1,.metade2{
+    .situacaoAtual, .ultimaCorrida {
         width: 100%;
-    }
-    .saldo{
-        width: 100%;
-        height: 11vh;
+        padding: 15px;
+        height: auto;
     }
 
-    .valor span{
+    .metade1, .metade2 {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .saldo {
+        padding: 15px;
+    }
+
+    .valor span {
         font-size: 20px;
     }
 
-    .valorSaldo{
-        margin-top: 0;
+    .ultimosLancamentos {
+        height: auto;
+        padding: 15px;
     }
 
-    .ultimosLancamentos{
-        height: 30vh;
+    .historicoKM {
+        height: auto;
+        padding: 15px;
+    }
+    
+    /* Ajustes na tabela */
+    .tabelaLancamentos th, .tabelaLancamentos td {
+        padding: 8px;
+        font-size: 14px;
     }
 }
+
+/* Responsividade para dispositivos ainda menores */
+@media (max-width: 480px) {
+    .valorSaldo, .valorSaldoEscondido {
+        font-size: 20px;
+    }
+    
+    .eye-icon {
+        font-size: 20px;
+    }
+
+    .valor span {
+        font-size: 18px;
+    }
+}
+
+/* Ajuste para dispositivos móveis */
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        left: -250px; /* Menu oculto fora da tela */
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        z-index: 10;
+        transition: left 0.3s ease;
+    }
+    .duasDiv{
+        flex-direction: column;
+    }
+    .saldo{
+        height: auto;
+    }
+
+    /* Menu quando aberto */
+    #sidebar.open {
+        left: 0;
+    }
+
+    /* Botão de abrir/fechar que se move junto com o menu */
+    #open_btn {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        transform: translateX(0); /* Botão na posição inicial */
+        transition: left 0.3s ease, transform 0.3s ease;
+        background-color: #4f46e5;
+        color: #e3e9f7;
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        z-index: 11;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Posiciona o botão à direita do menu quando ele está aberto */
+   #open_btn.open {
+        left: 250px;
+        transform: translateX(-100%);
+    }
+    .metade1.sidebar-open {
+        width: 100%;
+    }
+}
+

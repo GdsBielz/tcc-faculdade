@@ -1,5 +1,170 @@
 {% extends 'base.html' %}
 
 {% block body %}
-Conta
+<h2>Editar Perfil</h2>
+
+<div class="divMestre">
+    <div class="metade1">
+        <form id="formAtualizar" class="formAtualizar">
+            <div class="campo">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="{{ nomeUsuario }}" placeholder="Digite seu nome" required />
+            </div>
+            
+            <div class="campo">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ emailUsuario }}" placeholder="Digite seu email" required />
+            </div>
+            
+            <div class="campo">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" />
+            </div>
+
+            <button type="button" class="atualizarBtn" onclick="atualizarUsuario()">Atualizar Dados</button>
+            <button type="button" class="btnExcluir" onclick="excluirUsuario()">Excluir Conta</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    async function atualizarUsuario() {
+        const nome = document.getElementById("nome").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch('/alterar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome, email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+                location.reload(); // Atualiza a página após sucesso
+            } else {
+                alert(data.message || "Erro ao atualizar dados.");
+            }
+        } catch (error) {
+            alert("Erro ao conectar ao servidor.");
+        }
+    }
+
+    async function excluirUsuario() {
+        const confirm1 = confirm("Tem certeza de que deseja excluir sua conta?");
+        if (!confirm1) return;
+    
+        const confirm2 = confirm("Esta ação é irreversível. Clique em 'OK' para confirmar.");
+        if (!confirm2) return;
+    
+        // Checa se o campo de senha já existe para evitar duplicação
+        if (!document.getElementById("confirmPassword")) {
+            const senhaField = document.createElement("div");
+            senhaField.className = "campo";
+            senhaField.innerHTML = `
+                <label for="confirmPassword">Confirme sua senha:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Digite sua senha para confirmar" required />
+                <button type="button" class="btnExcluir" onclick="confirmarExclusao()">Confirmar Exclusão</button>
+            `;
+            document.getElementById("formAtualizar").appendChild(senhaField);
+        }
+    }
+    
+    async function confirmarExclusao() {
+        const confirmPassword = document.getElementById("confirmPassword").value;
+    
+        try {
+            const response = await fetch('/excluir', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: confirmPassword }),
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+                window.location.href = '/'; // Redireciona para a página inicial
+            } else {
+                alert(data.message || "Erro ao excluir conta.");
+            }
+        } catch (error) {
+            alert("Erro ao conectar ao servidor.");
+        }
+    }
+    
+</script>
+
+<style>
+    .formAtualizar {
+        background-color: #252525;
+        border-radius: 18px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .formAtualizar .campo {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .formAtualizar label {
+        color: #e3e9f7;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .formAtualizar input {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        background-color: #1f1f1f;
+        color: #e3e9f7;
+    }
+
+    .formAtualizar button {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        
+        color: #e3e9f7;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+
+
+    .btnExcluir {
+        background-color: #e63946;
+        margin-top: 10px;
+    }
+
+    .btnExcluir:hover {
+        background-color: #d62828;
+    }
+    .atualizarBtn{
+        background-color: #4f46e5;
+    }
+    .atualizarBtn button:hover {
+        background-color: #5f56f7;
+    }
+
+    /* Responsividade para dispositivos móveis */
+    @media (max-width: 768px) {
+        .formAtualizar {
+            width: 100%;
+        }
+    }
+</style>
+
 {% endblock %}

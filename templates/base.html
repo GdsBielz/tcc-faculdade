@@ -14,14 +14,11 @@
     <nav id="sidebar">
         <div id="sidebar_content">
             <div id="user">
-                <img src="/images/avatar.jpeg" id="user_avatar" alt="Avatar">
+                <img src="/images/user.jpg" id="user_avatar" alt="Avatar">
     
                 <p id="user_infos">
                     <span class="item-description">
-                        Gabriel Sales
-                    </span>
-                    <span class="item-description">
-                        Motorista
+                        {{nomeUsuario}}
                     </span>
                 </p>
             </div>
@@ -37,14 +34,6 @@
                     </a>
                 </li>
     
-                <li class="side-item">
-                    <a href="/caixa">
-                        <i class="fa-solid fa-chart-simple" style="color: white;"></i>
-                        <span class="item-description">
-                            Fluxo de Caixa
-                        </span>
-                    </a>
-                </li>
     
                 <li class="side-item">
                     <a href="/metas">
@@ -73,14 +62,6 @@
                   </a>
                 </li>
     
-                <li class="side-item">
-                    <a href="/configuracoes">
-                        <i class="fa-solid fa-gear" style="color: white;"></i>
-                        <span class="item-description">
-                            Configurações
-                        </span>
-                    </a>
-                </li>
             </ul>
     
             <button id="open_btn">
@@ -124,5 +105,14 @@
       item.parentElement.classList.remove('active'); // Remove a classe 'active' dos outros itens
     }
   });
+
+  const sidebar = document.getElementById('sidebar');
+  const openBtn = document.getElementById('open_btn');
+  
+
+  openBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    openBtn.classList.toggle('open'); // Adiciona a classe para o botão também
+});
 </script>
 </html>
