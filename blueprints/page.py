@@ -1,5 +1,7 @@
 from functools import wraps
-from flask import Blueprint, redirect, render_template, session, url_for
+from flask import Blueprint, redirect, render_template, request, session, url_for
+
+from libs.sql import sqlExecute, sqlSelectDict
 
 page = Blueprint('page', __name__)
 
@@ -50,8 +52,47 @@ def caixa():
 @login_required
 def metas():
     nomeUsuario = getUsername()
-    return render_template("metas.html", nomeUsuario=nomeUsuario)
+    usuario_id = session.get('user_id')
+    metas = sqlSelectDict("SELECT * FROM metas WHERE usuario_id = %s", (usuario_id,))
+    
+    total_metas = len(metas)
+    metas_concluidas = sum(1 for meta in metas if meta['concluida'])
+    porcentagem_concluidas = round((metas_concluidas / total_metas * 100), 2) if total_metas > 0 else 0
 
+
+    return render_template('metas.html', metas=metas, porcentagem=porcentagem_concluidas, nomeUsuario=nomeUsuario)
+
+@page.route('/add-meta', methods=['POST'])
+@login_required
+def add_meta():
+    descricao = request.form.get('descricao')
+    usuario_id = session.get('user_id')
+    
+    if descricao:
+        sqlExecute("INSERT INTO metas (descricao, usuario_id, concluida) VALUES (%s, %s, %s)", (descricao, usuario_id, 0))
+    return redirect(url_for('page.metas'))
+
+@page.route('/update-meta/<int:id>', methods=['POST'])
+@login_required
+def update_meta(id):
+    usuario_id = session.get('user_id')
+    meta = sqlSelectDict("SELECT * FROM metas WHERE idmeta = %s AND usuario_id = %s", (id, usuario_id))
+    
+    if meta:
+        concluida = meta[0]['concluida']
+        if concluida == 0:
+            concluida = 1
+        else:
+            concluida = 0
+        sqlExecute("UPDATE metas SET concluida = %s WHERE idmeta = %s AND usuario_id = %s", (concluida, id, usuario_id))
+    return redirect(url_for('page.metas'))
+
+@page.route('/delete-meta/<int:id>', methods=['POST'])
+@login_required
+def delete_meta(id):
+    usuario_id = session.get('user_id')
+    sqlExecute("DELETE FROM metas WHERE idmeta = %s AND usuario_id = %s", (id, usuario_id))
+    return redirect(url_for('page.metas'))
 
 @page.route("/dashboard")
 @login_required
