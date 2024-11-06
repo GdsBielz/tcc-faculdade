@@ -150,11 +150,17 @@ main {
     padding: 12px;
 }
 
-#user {
+.userClass {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 24px;
+    justify-content: center;
+    
+}
+.user-open {
+    justify-content: normal;
+    
 }
 
 #user_avatar {
@@ -185,6 +191,11 @@ main {
     border-radius: 8px;
     padding: 14px;
     cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0a0a;
 }
 
 .side-item.active {
@@ -196,19 +207,12 @@ main {
     background-color: #4f46e5;
 }
 
-.side-item a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0a0a0a;
-}
 
-.side-item.active a {
+.side-item.active {
     color: #e3e9f7;
 }
 
-.side-item a i {
+.side-item i {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -303,7 +307,13 @@ main {
     .divMestre {
         flex-direction: column-reverse;
     }
-
+    main {
+        margin-top: 70px;
+        z-index: 1;
+        padding: 10px;
+        color: white;
+        width: 100%;
+    }
     .situacaoAtual, .ultimaCorrida {
         width: 100%;
         padding: 15px;

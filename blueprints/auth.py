@@ -103,7 +103,7 @@ def alterar_usuario():
         usuario_id = session.get("user_id")  # Usar o ID do usuário logado na sessão
         
         # Verificar se o usuário existe no banco
-        user = sqlSelectDict("SELECT * FROM usuarios WHERE id = %s", (usuario_id,))
+        user = sqlSelectDict("SELECT * FROM usuarios WHERE idusuarios = %s", (usuario_id,))
         if not user:
             return make_response(jsonify(message="Usuário não encontrado."), 404)
 
@@ -127,7 +127,7 @@ def alterar_usuario():
         # Verifica se há campos para atualizar
         if updates:
             params.append(usuario_id)
-            sqlExecute(f"UPDATE usuarios SET {', '.join(updates)} WHERE id = %s", tuple(params))
+            sqlExecute(f"UPDATE usuarios SET {', '.join(updates)} WHERE idusuarios = %s", tuple(params))
 
             # Atualizar a sessão se o email ou nome foram alterados
             if nome:

@@ -226,6 +226,9 @@ nav ul {
 
 /* Ajustes para dispositivos móveis */
 @media (max-width: 768px) {
+    .section3{
+        display: none;
+    }
     nav ul {
         display: none;
     }

@@ -8,12 +8,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/js.js"></script>
     
-    <title>Home</title>
+    <title>FICON</title>
 </head>
 <body>
     <nav id="sidebar">
         <div id="sidebar_content">
-            <div id="user">
+            <div id="user" class="userClass">
                 <img src="/images/user.jpg" id="user_avatar" alt="Avatar">
     
                 <p id="user_infos">
@@ -25,41 +25,29 @@
     
             <ul id="side_items">
     
-                <li class="side-item">
-                    <a href="/home">
-                      <i class="fa-solid fa-house" style="color: white;"></i>
-                        <span class="item-description">
-                            Home
-                        </span>
-                    </a>
+                <li class="side-item" onclick="window.location.href='/home'">
+                    <i class="fa-solid fa-house" style="color: white;"></i>
+                    <span class="item-description">
+                        Home
+                    </span>
                 </li>
-    
-    
-                <li class="side-item">
-                    <a href="/metas">
-                      <i class="fa-solid fa-receipt" style="color: white;"></i>
-                        <span class="item-description">
-                            Metas
-                        </span>
-                    </a>
+                <li class="side-item" onclick="window.location.href='/metas'">
+                    <i class="fa-solid fa-receipt" style="color: white;"></i>
+                    <span class="item-description">
+                        Metas
+                    </span>
                 </li>
-
-                <li class="side-item">
-                  <a href="/dashboard">
-                      <i class="fa-solid fa-chart-line" style="color: white;"></i>
-                      <span class="item-description">
-                          Dashboard
-                      </span>
-                  </a>
+                <li class="side-item" onclick="window.location.href='/dashboard'">
+                    <i class="fa-solid fa-chart-line" style="color: white;"></i>
+                    <span class="item-description">
+                        Dashboard
+                    </span>
                 </li>
-
-                <li class="side-item">
-                  <a href="/conta">
-                      <i class="fa-solid fa-user" style="color: white;"></i>
-                      <span class="item-description">
-                          Conta
-                      </span>
-                  </a>
+                <li class="side-item" onclick="window.location.href='/conta'">
+                    <i class="fa-solid fa-user" style="color: white;"></i>
+                    <span class="item-description">
+                        Conta
+                    </span>
                 </li>
     
             </ul>
@@ -89,28 +77,33 @@
     <script src="src/javascript/script.js"></script>
 </body>
 <script>
-  // Adicionar evento para abrir/fechar o sidebar
-  document.getElementById('open_btn').addEventListener('click', function () {
+// Adicionar evento para abrir/fechar o sidebar
+document.getElementById('open_btn').addEventListener('click', function () {
     document.getElementById('sidebar').classList.toggle('open-sidebar');
-  });
+    user = document.getElementById('user').classList.toggle('user-open');;
+    
+});
 
-  // Verifica a URL atual e adiciona a classe 'active' no item correspondente
-  const currentPath = window.location.pathname; // Obtém o caminho atual da URL
-  const menuItems = document.querySelectorAll('#side_items .side-item a'); // Seleciona todos os links do menu
+// Verifica a URL atual e adiciona a classe 'active' no item correspondente
+const currentPath = window.location.pathname; // Obtém o caminho atual da URL
+const menuItems = document.querySelectorAll('#side_items .side-item'); // Seleciona todos os itens do menu
+const user = document.getElementById('user');
 
-  menuItems.forEach(item => {
-    if (item.getAttribute('href') === currentPath) {
-      item.parentElement.classList.add('active'); // Adiciona a classe 'active' no item pai (li)
+menuItems.forEach(item => {
+    const itemPath = item.getAttribute('onclick').match(/'([^']+)'/)[1]; // Extrai o link do onclick
+    if (itemPath === currentPath) {
+        item.classList.add('active'); // Adiciona a classe 'active' no item correspondente
     } else {
-      item.parentElement.classList.remove('active'); // Remove a classe 'active' dos outros itens
+        item.classList.remove('active'); // Remove a classe 'active' dos outros itens
     }
-  });
+});
 
-  const sidebar = document.getElementById('sidebar');
-  const openBtn = document.getElementById('open_btn');
-  
 
-  openBtn.addEventListener('click', () => {
+
+const sidebar = document.getElementById('sidebar');
+const openBtn = document.getElementById('open_btn');
+
+openBtn.addEventListener('click', () => {
     sidebar.classList.toggle('open');
     openBtn.classList.toggle('open'); // Adiciona a classe para o botão também
 });

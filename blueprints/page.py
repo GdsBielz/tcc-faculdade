@@ -104,14 +104,14 @@ def dashboard():
 @page.route("/conta")
 @login_required
 def conta():
-    nomeUsuario = getUsername()
+    nomeUsuario = getUsername(completo=True)
     emailUsuario = session.get("user_email")
     return render_template("conta.html", nomeUsuario=nomeUsuario, emailUsuario = emailUsuario)
 
 @page.route("/configuracoes")
 @login_required
 def configuracoes():
-    nomeUsuario = getUsername()
+    nomeUsuario = getUsername(completo=True)
     return render_template("configuracoes.html", nomeUsuario=nomeUsuario)
 
 @page.route("/landing-page")
