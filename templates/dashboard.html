@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<!-- <h1>Olá, {{nomeUsuario}}!</h1> -->
+<h1>Olá, {{nomeUsuario}}! Confira seu dashboard:</h1>
 <div class="dashboard">
     <div class="cards">
         <div class="card" style="background-color: #d4f8d4;">
@@ -32,6 +32,21 @@
     </div>
 </div>
 <style>
+    @media (max-width: 768px) {
+        .charts{
+            flex-direction: column !important;
+        }
+        .cards{
+            flex-direction: column;
+        }
+        .pizza{
+            width: 100% !important;
+    
+        }
+        .barra{
+            width: 100% !important;
+        }
+    }
     .dashboard {
         display: flex;
         flex-direction: column;
@@ -75,7 +90,6 @@
     }
     .charts{
         display: flex;
-        flex-direction: row;
         width: 100%;
         justify-content: space-between;
         height: 400px;
