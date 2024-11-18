@@ -1,5 +1,137 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>Olá, {{nomeUsuario}}!</h1>
+<!-- <h1>Olá, {{nomeUsuario}}!</h1> -->
+<div class="dashboard">
+    <div class="cards">
+        <div class="card" style="background-color: #d4f8d4;">
+            <h3>Total de ganhos valor bruto</h3>
+            <h1>$1800</h1>
+            <p>+18% relação ao último mês</p>
+        </div>
+        <div class="card" style="background-color: #f4f8d4;">
+            <h3>Total de ganhos valor líquido</h3>
+            <h1>$1.233</h1>
+            <p>+23%</p>
+        </div>
+        <div class="card" style="background-color: #f8d4d4;">
+            <h3>Gastos</h3>
+            <h1>$567</h1>
+            <p>-8%</p>
+        </div>
+    </div>
+    <div class="charts">
+        <div class="chart-container barra">
+            <h3>Total de corridas mensais</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-container pizza">
+            <h3>Distribuição de Categorias</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+</div>
+<style>
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .cards {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .card {
+        flex: 1;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .card h1, .card h3, .card p {
+        color: black;
+    }
+    
+    .chart-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        width: 50%
+    }
+    .pizza{
+        width: 30%;
+
+    }
+    .barra{
+        width: 65%;
+    }
+    .charts{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        height: 400px;
+    }
+</style>
+<script>
+    const barCtx = document.getElementById('barChart').getContext('2d');
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
+        datasets: [{
+            label: 'Corridas Mensais',
+            data: [120, 150, 100, 70, 50, 90, 120, 180, 170, 160, 0, 0],
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Gasolina', 'Comida', 'Lavagem', 'Lazer'],
+        datasets: [{
+            data: [200, 150, 50, 100], // Valores em reais
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        // Formatar o valor com "R$"
+                        let value = context.raw;
+                        return `R$ ${value.toFixed(2)}`; // Exibe com 2 casas decimais
+                    }
+                }
+            }
+        }
+    }
+});
+
+
+</script>
 {% endblock %}
