@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Blueprint, redirect, render_template, request, session, url_for
+from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
 from libs.sql import sqlExecute, sqlSelectDict
 
@@ -100,7 +100,53 @@ def dashboard():
     nomeUsuario = getUsername()
     return render_template("dashboard.html", nomeUsuario=nomeUsuario)
 
+@page.route("/insercao")
+@login_required
+def insercao():
+    nomeUsuario = getUsername()
+    return render_template("insercao.html", nomeUsuario=nomeUsuario)
 
+@page.route("/api/insercao", methods=["POST"])
+@login_required
+def api_insercao():
+    try:
+        # Obtém os dados enviados pelo front-end
+        data = request.get_json()
+
+        tipo = data["tipo"]
+        km = None
+        litros = None
+        nome = None
+        valor = None
+
+        if tipo == 'corrida':
+            valor = data['valor']
+            km = data['km']
+        elif tipo == 'abastecimento':
+            valor = data['valorTotal']
+            litros = data['litros']
+        elif tipo == 'manutencao':
+            valor = data['valor']
+            nome = data['nome']
+    
+        if km is not None:
+            #Inserir
+            print(km, valor)
+
+        elif litros is not None:
+            #Inserir
+            print(litros, valor)
+
+        elif nome is not None:
+            #Inserir
+            print(nome, valor)
+
+        # Retorna uma resposta de sucesso
+        return jsonify({"message": "Registro inserido com sucesso!"}), 200
+    except Exception as e:
+        print("Erro ao processar os dados:", e)
+        return jsonify({"error": "Ocorreu um erro ao processar os dados."}), 500
+    
 @page.route("/conta")
 @login_required
 def conta():

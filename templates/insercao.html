@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div id="form-container">
+    <label>
+      <input type="radio" name="option" value="corrida" onclick="handleOptionChange('corrida')" /> Corrida
+    </label>
+    <label>
+      <input type="radio" name="option" value="abastecimento" onclick="handleOptionChange('abastecimento')" /> Abastecimento
+    </label>
+    <label>
+      <input type="radio" name="option" value="manutencao" onclick="handleOptionChange('manutencao')" /> Manutenção
+    </label>
+  
+    <form id="dynamic-form" onsubmit="handleSubmit(event)">
+      <!-- Campos dinâmicos aparecerão aqui -->
+    </form>
+  </div>
+
+<style>
+  
+  /* Campos de Texto */
+  input[type="text"], input[type="number"] {
+    background-color: #1f1f1f;
+    border: 1px solid #3b3b3b;
+    border-radius: 8px;
+    color: #ffffff;
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  input[type="text"]:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: #7b5cff;
+    box-shadow: 0 0 5px rgba(123, 92, 255, 0.5);
+  }
+  
+  /* Botões */
+  .button-principal {
+    background-color: #7b5cff;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-principal:hover {
+    background-color: #6a4ce4;
+  }
+  
+  .button-principal:active {
+    transform: scale(0.95);
+  }
+  
+  /* Formulário e Alinhamento */
+  #form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #c7c7c7;
+  }
+  
+  /* Radio Buttons */
+  input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  
+</style>
+
+<script>
+    function handleOptionChange(option) {
+        const form = document.getElementById("dynamic-form");
+        form.innerHTML = ""; // Limpa os campos ao mudar de opção
+      
+        if (option === "corrida") {
+          form.innerHTML = `
+            <label>
+              Valor da Corrida (R$):
+              <input type="text" id="valor-corrida" oninput="formatCurrency(this)" />
+            </label>
+            <label>
+              Quilômetros:
+              <input type="number" id="km" />
+            </label>
+            <button class="button-principal" type="submit">Enviar</button>
+          `;
+        } else if (option === "abastecimento") {
+          form.innerHTML = `
+            <label>
+              Quantidade (LT):
+              <input type="text" id="litros" oninput="formatUnit(this, ' LT')" />
+            </label>
+            <label>
+              Valor Total (R$):
+              <input type="text" id="valor-total" oninput="formatCurrency(this)" />
+            </label>
+            <button class="button-principal" type="submit">Enviar</button>
+          `;
+        } else if (option === "manutencao") {
+          form.innerHTML = `
+            <label>
+              Nome da Manutenção:
+              <input type="text" id="nome-manutencao" />
+            </label>
+            <label>
+              Valor (R$):
+              <input type="text" id="valor-manutencao" oninput="formatCurrency(this)" />
+            </label>
+            <button class="button-principal" type="submit">Enviar</button>
+          `;
+        }
+      }
+      
+      function formatCurrency(input) {
+        let value = input.value.replace(/[^\d]/g, ""); // Remove tudo que não for número
+        
+        if (value.length > 13) { // Limita a entrada para valores até R$ 9.999.999,99
+          value = value.substring(0, 13);
+        }
+      
+        value = (parseInt(value, 10) / 100).toFixed(2); // Divide por 100 para manter duas casas decimais
+        
+        // Adiciona a pontuação de milhares
+        value = value
+          .split(".")[0] // Parte inteira
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + // Adiciona pontos a cada grupo de 3 dígitos
+          "," + 
+          value.split(".")[1]; // Parte decimal
+      
+        input.value = `R$ ${value}`;
+      }
+      
+      
+      
+      
+      function formatUnit(input, unit) {
+        input.value = input.value.replace(/\D/g, "") + unit;
+      }
+      
+      async function handleSubmit(event) {
+        event.preventDefault(); // Evita o reload da página
+      
+        const selectedOption = document.querySelector("input[name='option']:checked").value;
+        const data = {};
+      
+        if (selectedOption === "corrida") {
+          data.tipo = "corrida";
+          data.valor = document.getElementById("valor-corrida").value.replace("R$ ", "").replace(",", ".");
+          data.km = document.getElementById("km").value;
+        } else if (selectedOption === "abastecimento") {
+          data.tipo = "abastecimento";
+          data.litros = document.getElementById("litros").value.replace(" LT", "");
+          data.valorTotal = document.getElementById("valor-total").value.replace("R$ ", "").replace(",", ".");
+        } else if (selectedOption === "manutencao") {
+          data.tipo = "manutencao";
+          data.nome = document.getElementById("nome-manutencao").value;
+          data.valor = document.getElementById("valor-manutencao").value.replace("R$ ", "").replace(",", ".");
+        }
+      
+        try {
+          const response = await fetch("/api/insercao", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+      
+          if (response.ok) {
+            const result = await response.json();
+            console.log("Dados enviados com sucesso:", result);
+            alert("Registro inserido com sucesso!");
+          } else {
+            console.error("Erro ao enviar os dados:", await response.text());
+            alert("Erro ao inserir registro.");
+          }
+        } catch (error) {
+          console.error("Erro na requisição:", error);
+          alert("Erro ao se conectar ao servidor.");
+        }
+      }
+      
+      
+</script>
+{% endblock %}
+
+  
