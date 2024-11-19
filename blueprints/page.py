@@ -1,3 +1,5 @@
+from datetime import datetime
+from decimal import Decimal
 from functools import wraps
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
@@ -40,7 +42,78 @@ def raiz():
 @login_required
 def home():
     nomeUsuario = getUsername()
-    return render_template("home.html", nomeUsuario=nomeUsuario)
+    usuario_id = session.get('user_id')
+    
+    # Buscar dados do banco
+    dados = sqlSelectDict("SELECT * FROM dadosmotoristas WHERE usuario_id = %s ORDER BY dataHora DESC", (usuario_id,))
+    
+    # Processar os dados
+    ultimos_lancamentos = []
+    historico_km = []
+    ultima_corrida = None
+    saldo_atual = 0  # Valor inicial do saldo (ajuste conforme necessário)
+
+    for dado in dados:
+        tipoDado = dado['tipoDado']
+        valor = float(dado['valor'])  # Garantir que o valor seja numérico
+        dataHora = dado['dataHora']
+        manutencao = dado.get('manutencao')
+        litros = dado.get('litros')
+        km = dado.get('km')
+
+
+        if tipoDado == "corrida":
+            # Última corrida
+            if not ultima_corrida:
+                ultima_corrida = datetime.strptime(dataHora, "%Y-%m-%dT%H:%M:%S").strftime("%d/%m/%Y - %H:%M")
+            saldo_atual += valor
+            if km:
+                historico_km.append({"km": km, "valor": valor})
+            
+            cor = 'green'
+
+        elif tipoDado == "abastecimento":
+            saldo_atual -= valor
+            cor = 'red'
+        elif tipoDado == "manutencao":
+            saldo_atual -= valor
+            cor = 'red'
+
+        if saldo_atual < 0:
+            situacao_atual = {
+                "mensagem": "Você precisa melhorar!",
+                "cor": "red"
+            }
+        else:
+            situacao_atual = {
+                "mensagem": "Você está indo bem!",
+                "cor": "green"
+            }
+        # Adicionar ao histórico de lançamentos
+        servico = tipoDado.capitalize() if not manutencao else manutencao
+        forma_pagamento = "Não especificado"  # Ajustar caso tenha outra coluna
+        ultimos_lancamentos.append({
+            "servico": servico,
+            "pagamento": forma_pagamento,
+            "valor": valor,
+            "cor": cor
+        })
+
+    # Limitar itens a exibir (se necessário)
+    ultimos_lancamentos = ultimos_lancamentos[:4]
+    historico_km = historico_km[:5]
+    saldo_atual = f"{saldo_atual:,.2f}"
+
+    return render_template(
+        "home.html",
+        nomeUsuario=nomeUsuario,
+        ultimos_lancamentos=ultimos_lancamentos,
+        historico_km=historico_km,
+        ultima_corrida=ultima_corrida,
+        saldo_atual=saldo_atual,
+        situacao_atual=situacao_atual
+    )
+
 
 @page.route("/caixa")
 @login_required
@@ -98,7 +171,57 @@ def delete_meta(id):
 @login_required
 def dashboard():
     nomeUsuario = getUsername()
-    return render_template("dashboard.html", nomeUsuario=nomeUsuario)
+    usuario_id = session.get('user_id')
+
+    # Buscar dados do banco
+    dados = sqlSelectDict("SELECT * FROM dadosmotoristas WHERE usuario_id = %s ORDER BY dataHora DESC", (usuario_id,))
+    
+    total_ganhos_bruto = Decimal(0)
+    total_ganhos_liquido = Decimal(0)
+    total_gastos = Decimal(0)
+    
+    # Inicializando os totais das categorias de gráfico
+    corridas_mensais = [0] * 12  # Para armazenar o total de corridas por mês
+    categoria_valores = {"abastecimento": 0, "corrida": 0, "manutencao": 0}
+    
+    # Loop para calcular totais
+    for dado in dados:
+        tipoDado = dado['tipoDado']
+        valor = Decimal(dado['valor'])
+        dataHora = dado['dataHora']
+        
+        # Verificar se a dataHora não é None antes de tentar processar
+        if dataHora:
+            mes = int(dataHora.split('-')[1]) - 1  # Extrair o mês da data (0 = Janeiro, 11 = Dezembro)
+        else:
+            mes = -1  # Caso não haja data válida, ignore esse dado
+
+        if tipoDado == 'corrida':
+            total_ganhos_bruto += valor  # Corridas geram ganhos brutos
+            total_ganhos_liquido += valor  # Podemos somar ao valor líquido aqui, caso não haja deduções
+            if mes != -1:
+                corridas_mensais[mes] += 1  # Contabiliza a corrida no mês
+                
+        elif tipoDado in categoria_valores:
+            categoria_valores[tipoDado] += valor  # Abastecimento e manutenção são gastos
+    
+    # Formatando os valores
+    total_ganhos_bruto_formatado = f"R$ {total_ganhos_bruto:,.2f}"
+    total_ganhos_liquido_formatado = f"R$ {total_ganhos_liquido:,.2f}"
+    total_gastos_formatado = f"R$ {total_gastos:,.2f}"
+
+    # Passando os dados para o template
+    return render_template(
+        "dashboard.html",
+        nomeUsuario=nomeUsuario,
+        total_ganhos_bruto=total_ganhos_bruto_formatado,
+        total_ganhos_liquido=total_ganhos_liquido_formatado,
+        total_gastos=total_gastos_formatado,
+        corridas_mensais=corridas_mensais,
+        categoria_valores=categoria_valores
+    )
+
+
 
 @page.route("/insercao")
 @login_required
@@ -110,36 +233,38 @@ def insercao():
 @login_required
 def api_insercao():
     try:
-        # Obtém os dados enviados pelo front-end
+
         data = request.get_json()
-
+        usuario_id = session.get('user_id')
         tipo = data["tipo"]
-        km = None
-        litros = None
-        nome = None
-        valor = None
 
-        if tipo == 'corrida':
-            valor = data['valor']
-            km = data['km']
-        elif tipo == 'abastecimento':
-            valor = data['valorTotal']
-            litros = data['litros']
-        elif tipo == 'manutencao':
-            valor = data['valor']
-            nome = data['nome']
-    
+        # Inicializar campos opcionais como None
+        km = data.get("km")
+        litros = data.get("litros")
+        nome = data.get("nome")
+        valor = data.get("valor") or data.get("valorTotal")
+
+        # Determinar os campos e valores dinamicamente
+        campos = ["usuario_id", "tipoDado", "valor"]
+        valores = [usuario_id, tipo, valor]
+
         if km is not None:
-            #Inserir
-            print(km, valor)
-
+            campos.append("km")
+            valores.append(km)
         elif litros is not None:
-            #Inserir
-            print(litros, valor)
-
+            campos.append("litros")
+            valores.append(litros)
         elif nome is not None:
-            #Inserir
-            print(nome, valor)
+            campos.append("manutencao")
+            valores.append(nome)
+
+        # Gerar a query dinâmica
+        query = f"""INSERT INTO dadosmotoristas ({', '.join(campos)}, dataHora) 
+                    VALUES ({', '.join(['%s'] * len(valores))}, NOW())"""
+
+        # Executar a query
+        sqlExecute(query, tuple(valores))
+
 
         # Retorna uma resposta de sucesso
         return jsonify({"message": "Registro inserido com sucesso!"}), 200

@@ -1,23 +1,20 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h2>Olá, {{nomeUsuario}}! Confira seu dashboard:</h2>
+<h2>Olá, {{ nomeUsuario }}! Confira seu dashboard:</h2>
 <div class="dashboard">
     <div class="cards">
         <div class="card" style="background-color: #d4f8d4;">
             <h3>Total de ganhos valor bruto</h3>
-            <h1>$1800</h1>
-            <p>+18% relação ao último mês</p>
+            <h1>{{ total_ganhos_bruto }}</h1>
         </div>
         <div class="card" style="background-color: #f4f8d4;">
             <h3>Total de ganhos valor líquido</h3>
-            <h1>$1.233</h1>
-            <p>+23%</p>
+            <h1>{{ total_ganhos_liquido }}</h1>
         </div>
         <div class="card" style="background-color: #f8d4d4;">
             <h3>Gastos</h3>
-            <h1>$567</h1>
-            <p>-8%</p>
+            <h1>{{ total_gastos }}</h1>
         </div>
     </div>
     <div class="charts">
@@ -26,11 +23,12 @@
             <canvas id="barChart"></canvas>
         </div>
         <div class="chart-container pizza">
-            <h3>Distribuição de Categorias</h3>
+            <h3>Gastos</h3>
             <canvas id="pieChart"></canvas>
         </div>
     </div>
 </div>
+
 <style>
     @media (max-width: 768px) {
         .charts{
@@ -41,7 +39,6 @@
         }
         .pizza{
             width: 100% !important;
-    
         }
         .barra{
             width: 100% !important;
@@ -83,7 +80,6 @@
     }
     .pizza{
         width: 30%;
-
     }
     .barra{
         width: 65%;
@@ -95,57 +91,60 @@
         height: 400px;
     }
 </style>
+
 <script>
     const barCtx = document.getElementById('barChart').getContext('2d');
-const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
 
-new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
-        datasets: [{
-            label: 'Corridas Mensais',
-            data: [120, 150, 100, 70, 50, 90, 120, 180, 170, 160, 0, 0],
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
+    // Gráfico de Barras (Corridas Mensais)
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
+            datasets: [{
+                label: 'Corridas Mensais',
+                data: {{ corridas_mensais | tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
-    }
-});
+    });
 
-new Chart(pieCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Gasolina', 'Comida', 'Lavagem', 'Lazer'],
-        datasets: [{
-            data: [200, 150, 50, 100], // Valores em reais
-            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0']
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        // Formatar o valor com "R$"
-                        let value = context.raw;
-                        return `R$ ${value.toFixed(2)}`; // Exibe com 2 casas decimais
+    // Gráfico de Pizza (Distribuição de Categorias)
+    new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Abastecimento', 'Manutenção'],
+            datasets: [{
+                data: [
+                    {{ categoria_valores['abastecimento'] }},
+                    {{ categoria_valores['manutencao'] }}
+                ],
+                backgroundColor: ['#ff6384', '#ffcd56']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw;
+                            return `R$ ${value.toFixed(2)}`; // Exibe com 2 casas decimais
+                        }
                     }
                 }
             }
         }
-    }
-});
-
-
+    });
 </script>
 {% endblock %}

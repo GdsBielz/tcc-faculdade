@@ -12,6 +12,7 @@ app = Flask(__name__, static_url_path='', static_folder='static')
 app.secret_key = 'tccfacul2024'
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # 30 minutos de duração
+app.jinja_env.globals.update(abs=abs)
 Session(app)
 Compress(app)
 app.register_blueprint(auth)

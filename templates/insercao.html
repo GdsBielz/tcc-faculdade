@@ -185,6 +185,7 @@
             const result = await response.json();
             console.log("Dados enviados com sucesso:", result);
             alert("Registro inserido com sucesso!");
+            window.location = '/home'
           } else {
             console.error("Erro ao enviar os dados:", await response.text());
             alert("Erro ao inserir registro.");

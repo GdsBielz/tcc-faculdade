@@ -6,12 +6,26 @@
 <div class="divMestre">
     <div class="metade1" id="metade1">
         <div class="duasDiv">
-            <div class="situacaoAtual"><span class="situacaoAtualText">Situação atual:</span> <span class="green">Você está indo bem!</span></div>
-            <div class="ultimaCorrida"><span class="ultimaCorridaText">Última corrida:</span> <b>19/11/2024 às 15:13</b></div>
+            <div class="situacaoAtual">
+                <span class="situacaoAtualText">Situação atual:</span>
+                <span class="{{ situacao_atual.cor }}">{{ situacao_atual.mensagem }}</span>
+            </div>
+            
+            <div class="ultimaCorrida">
+                <span class="ultimaCorridaText">Última corrida:</span>
+                <b>{{ ultima_corrida }}</b>
+            </div>
         </div>
         
         <div class="ultimosLancamentos">
-            <span class="ultimosLancamentosText">Últimos lançamentos</span>
+            <div class="divLancamentos">
+                <span class="ultimosLancamentosText">Últimos lançamentos</span>
+                <button class="button-inserir" onclick="window.location.href='/insercao'">
+                    <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                        Inserir
+                </button>
+            </div>
+            
 
             <!-- Tabela adicionada -->
             <table class="tabelaLancamentos">
@@ -23,53 +37,35 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for lancamento in ultimos_lancamentos %}
                     <tr>
-                        <td>Lanche</td>
-                        <td>Crédito</td>
-                        <td class="red">- R$ 20,00</td>
+                        <td>{{ lancamento.servico }}</td>
+                        <td>{{ lancamento.pagamento }}</td>
+                        <td class="{{ lancamento.cor }}">
+                            {{ '+ R$' if lancamento.cor == 'green' else '- R$' }}{{ abs(lancamento.valor) }}
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Pedágio</td>
-                        <td>Dinheiro</td>
-                        <td class="red">- R$ 10,00</td>
-                    </tr>
-                    <tr>
-                        <td>Gasolina</td>
-                        <td>Débito</td>
-                        <td class="red">- R$ 50,00</td>
-                    </tr>
-                    <tr>
-                        <td>Corrida</td>
-                        <td>PIX</td>
-                        <td class="green">+ R$ 25,00</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
 
         <div class="historicoKM">
-            <span class="historicoKMText">Histórico de KM</span>
+            <div class="divLancamentos">
+                <span class="historicoKMText">Histórico de KM</span>
+                <button class="button-inserir" onclick="window.location.href='/insercao'">
+                    <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                        Inserir
+                </button>
+            </div>
+            
             <div class="historicoKMContainer">
+                {% for km in historico_km %}
                 <div class="kmItem">
-                    <div class="kmCircle">3 KM</div>
-                    <div class="kmValue green">+ R$ 11,00</div>
+                    <div class="kmCircle">{{ km.km }} KM</div>
+                    <div class="kmValue green">+ R$ {{ km.valor }}</div>
                 </div>
-                <div class="kmItem">
-                    <div class="kmCircle">9 KM</div>
-                    <div class="kmValue green">+ R$ 32,00</div>
-                </div>
-                <div class="kmItem">
-                    <div class="kmCircle">2 KM</div>
-                    <div class="kmValue green">+ R$ 8,00</div>
-                </div>
-                <div class="kmItem">
-                    <div class="kmCircle">7 KM</div>
-                    <div class="kmValue green">+ R$ 24,00</div>
-                </div>
-                <div class="kmItem">
-                    <div class="kmCircle">3 KM</div>
-                    <div class="kmValue green">+ R$ 12,00</div>
-                </div>
+                {% endfor %}
             </div>
 
         </div>
@@ -81,7 +77,7 @@
         <div class="saldo">
             <div class="valor">
                 <span>Saldo:</span>
-                <div class="valorSaldo" id="valorSaldo">R$200,00</div>
+                <div class="valorSaldo" id="valorSaldo">R${{ saldo_atual }}</div>
                 <div class="valorSaldoEscondido" id="valorSaldoEscondido">*****</div>
             </div>
             <div class="opcoes">
