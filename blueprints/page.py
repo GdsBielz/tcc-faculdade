@@ -77,22 +77,29 @@ def home():
             litros = dado.get('litros')
             km = dado.get('km')
 
+            # Determinar os detalhes com base no tipoDado
             if tipoDado == "corrida":
+                detalhes = f"{km} km" if km else "Sem detalhes"
+                cor = 'green'
+                saldo_atual += valor
+
                 # Última corrida
                 if not ultima_corrida:
                     ultima_corrida = datetime.strptime(dataHora, "%Y-%m-%dT%H:%M:%S").strftime("%d/%m/%Y - %H:%M")
-                saldo_atual += valor
                 if km:
                     historico_km.append({"km": km, "valor": valor})
-                cor = 'green'
 
             elif tipoDado == "abastecimento":
-                saldo_atual -= valor
+                detalhes = f"{litros} litros" if litros else "Sem detalhes"
                 cor = 'red'
-            elif tipoDado == "manutencao":
                 saldo_atual -= valor
-                cor = 'red'
 
+            elif tipoDado == "manutencao":
+                detalhes = manutencao if manutencao else "Sem detalhes"
+                cor = 'red'
+                saldo_atual -= valor
+
+            # Situação atual do saldo
             if saldo_atual < 0:
                 situacao_atual = {
                     "mensagem": "Você precisa melhorar!",
@@ -103,15 +110,15 @@ def home():
                     "mensagem": "Você está indo bem!",
                     "cor": "green"
                 }
+
             # Adicionar ao histórico de lançamentos
-            servico = tipoDado.capitalize() if not manutencao else manutencao
-            forma_pagamento = "Não especificado"  # Ajustar caso tenha outra coluna
             ultimos_lancamentos.append({
-                "servico": servico,
-                "pagamento": forma_pagamento,
+                "servico": tipoDado.capitalize(),
+                "detalhes": detalhes,
                 "valor": valor,
                 "cor": cor
             })
+
 
         # Limitar itens a exibir (se necessário)
         ultimos_lancamentos = ultimos_lancamentos[:4]

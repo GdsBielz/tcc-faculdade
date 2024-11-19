@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Serviço</th>
-                        <th>Pagamento</th>
+                        <th>Detalhes</th>
                         <th>Valor</th>
                     </tr>
                 </thead>
@@ -40,7 +40,7 @@
                     {% for lancamento in ultimos_lancamentos %}
                     <tr>
                         <td>{{ lancamento.servico }}</td>
-                        <td>{{ lancamento.pagamento }}</td>
+                        <td>{{ lancamento.detalhes }}</td>
                         <td class="{{ lancamento.cor }}">
                             {{ '+ R$' if lancamento.cor == 'green' else '- R$' if lancamento.cor == 'red' else 'R$' }}{{ abs(lancamento.valor) }}
 
