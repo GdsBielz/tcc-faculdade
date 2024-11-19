@@ -70,7 +70,43 @@
             </div>
 
         </div>
+        <div class="ultimasMetas2">
+            <div class="divLancamentos">
+                <span class="historicoKMText">ÚLTIMAS TRÊS METAS</span>
+                <button class="button-inserir" onclick="window.location.href='/metas'">
+                    <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                        Inserir
+                </button>
+            </div>
+            <div style="margin-top: 10px;">
+                <ul class="ulMeta">
+                    {% for meta in metas %}
+                        <li class="liMeta">
+                            <form action="/update-meta/{{ meta.idmeta }}" method="POST">
+                                <label style="display: flex;">
+                                    <div class="checkbox-wrapper-19">
+                                        <input type="checkbox" id="cbtest-{{ meta.idmeta }}" name="concluida" onclick="toggleChecked(this)" onchange="this.form.submit()" {% if meta.concluida == 1 %}checked{% endif %}/>
+                                        <label for="cbtest-{{ meta.idmeta }}" class="check-box"></label>
+                                        
+                                        
+                                      </div>
+                                      {{ meta.descricao }}
+                                    
+                                </label>
+                            </form>
+                            <form action="/delete-meta/{{ meta.idmeta }}" method="POST" style="display:inline;">
+                                <button class="btnMeta" type="submit">Excluir</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            
+                <div class="porcentagem-concluida">
+                    <p>Porcentagem das três metas: {{ porcentagem }}%</p>
+                </div>
+            </div>
 
+        </div>
 
     </div>
     
