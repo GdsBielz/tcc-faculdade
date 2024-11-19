@@ -42,7 +42,8 @@
                         <td>{{ lancamento.servico }}</td>
                         <td>{{ lancamento.pagamento }}</td>
                         <td class="{{ lancamento.cor }}">
-                            {{ '+ R$' if lancamento.cor == 'green' else '- R$' }}{{ abs(lancamento.valor) }}
+                            {{ '+ R$' if lancamento.cor == 'green' else '- R$' if lancamento.cor == 'red' else 'R$' }}{{ abs(lancamento.valor) }}
+
                         </td>
                     </tr>
                     {% endfor %}

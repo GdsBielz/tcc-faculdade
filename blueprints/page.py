@@ -47,62 +47,76 @@ def home():
     # Buscar dados do banco
     dados = sqlSelectDict("SELECT * FROM dadosmotoristas WHERE usuario_id = %s ORDER BY dataHora DESC", (usuario_id,))
     
-    # Processar os dados
-    ultimos_lancamentos = []
-    historico_km = []
-    ultima_corrida = None
-    saldo_atual = 0  # Valor inicial do saldo (ajuste conforme necessário)
+    # Verificar se não há dados e fornecer valores padrão
+    if not dados:
+        ultimos_lancamentos = [{
+            "servico": "Nenhum lançamento",
+            "pagamento": "Não especificado",
+            "valor": 0.00,
+            "cor": "gray"
+        }]
+        historico_km = []
+        ultima_corrida = "Nenhuma corrida realizada"
+        saldo_atual = 0.00
+        situacao_atual = {
+            "mensagem": "Você ainda não possui registros.",
+            "cor": "gray"
+        }
+    else:
+        # Processar os dados
+        ultimos_lancamentos = []
+        historico_km = []
+        ultima_corrida = None
+        saldo_atual = 0.00  # Valor inicial do saldo (ajuste conforme necessário)
 
-    for dado in dados:
-        tipoDado = dado['tipoDado']
-        valor = float(dado['valor'])  # Garantir que o valor seja numérico
-        dataHora = dado['dataHora']
-        manutencao = dado.get('manutencao')
-        litros = dado.get('litros')
-        km = dado.get('km')
+        for dado in dados:
+            tipoDado = dado['tipoDado']
+            valor = float(dado['valor'])  # Garantir que o valor seja numérico
+            dataHora = dado['dataHora']
+            manutencao = dado.get('manutencao')
+            litros = dado.get('litros')
+            km = dado.get('km')
 
+            if tipoDado == "corrida":
+                # Última corrida
+                if not ultima_corrida:
+                    ultima_corrida = datetime.strptime(dataHora, "%Y-%m-%dT%H:%M:%S").strftime("%d/%m/%Y - %H:%M")
+                saldo_atual += valor
+                if km:
+                    historico_km.append({"km": km, "valor": valor})
+                cor = 'green'
 
-        if tipoDado == "corrida":
-            # Última corrida
-            if not ultima_corrida:
-                ultima_corrida = datetime.strptime(dataHora, "%Y-%m-%dT%H:%M:%S").strftime("%d/%m/%Y - %H:%M")
-            saldo_atual += valor
-            if km:
-                historico_km.append({"km": km, "valor": valor})
-            
-            cor = 'green'
+            elif tipoDado == "abastecimento":
+                saldo_atual -= valor
+                cor = 'red'
+            elif tipoDado == "manutencao":
+                saldo_atual -= valor
+                cor = 'red'
 
-        elif tipoDado == "abastecimento":
-            saldo_atual -= valor
-            cor = 'red'
-        elif tipoDado == "manutencao":
-            saldo_atual -= valor
-            cor = 'red'
+            if saldo_atual < 0:
+                situacao_atual = {
+                    "mensagem": "Você precisa melhorar!",
+                    "cor": "red"
+                }
+            else:
+                situacao_atual = {
+                    "mensagem": "Você está indo bem!",
+                    "cor": "green"
+                }
+            # Adicionar ao histórico de lançamentos
+            servico = tipoDado.capitalize() if not manutencao else manutencao
+            forma_pagamento = "Não especificado"  # Ajustar caso tenha outra coluna
+            ultimos_lancamentos.append({
+                "servico": servico,
+                "pagamento": forma_pagamento,
+                "valor": valor,
+                "cor": cor
+            })
 
-        if saldo_atual < 0:
-            situacao_atual = {
-                "mensagem": "Você precisa melhorar!",
-                "cor": "red"
-            }
-        else:
-            situacao_atual = {
-                "mensagem": "Você está indo bem!",
-                "cor": "green"
-            }
-        # Adicionar ao histórico de lançamentos
-        servico = tipoDado.capitalize() if not manutencao else manutencao
-        forma_pagamento = "Não especificado"  # Ajustar caso tenha outra coluna
-        ultimos_lancamentos.append({
-            "servico": servico,
-            "pagamento": forma_pagamento,
-            "valor": valor,
-            "cor": cor
-        })
-
-    # Limitar itens a exibir (se necessário)
-    ultimos_lancamentos = ultimos_lancamentos[:4]
-    historico_km = historico_km[:5]
-    saldo_atual = f"{saldo_atual:,.2f}"
+        # Limitar itens a exibir (se necessário)
+        ultimos_lancamentos = ultimos_lancamentos[:4]
+        historico_km = historico_km[:5]
+        saldo_atual = f"{saldo_atual:,.2f}"
 
     return render_template(
         "home.html",
@@ -113,6 +127,7 @@ def home():
         saldo_atual=saldo_atual,
         situacao_atual=situacao_atual
     )
+
 
 
 @page.route("/caixa")
@@ -201,9 +216,10 @@ def dashboard():
             total_ganhos_liquido += valor  # Podemos somar ao valor líquido aqui, caso não haja deduções
             if mes != -1:
                 corridas_mensais[mes] += 1  # Contabiliza a corrida no mês
-                
+
         elif tipoDado in categoria_valores:
             categoria_valores[tipoDado] += valor  # Abastecimento e manutenção são gastos
+            total_gastos +=valor
     
     # Formatando os valores
     total_ganhos_bruto_formatado = f"R$ {total_ganhos_bruto:,.2f}"

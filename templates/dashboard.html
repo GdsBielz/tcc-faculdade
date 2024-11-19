@@ -71,12 +71,13 @@
     }
     
     .chart-container {
-        background: #fff;
+        background-color: #252525;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         margin-top: 20px;
         width: 50%
+
     }
     .pizza{
         width: 30%;
@@ -115,6 +116,9 @@
                 y: {
                     beginAtZero: true
                 }
+            },
+            plugins: {
+                backgroundColor: '#252525'  // Cor de fundo do gráfico
             }
         }
     });
@@ -142,7 +146,8 @@
                             return `R$ ${value.toFixed(2)}`; // Exibe com 2 casas decimais
                         }
                     }
-                }
+                },
+                backgroundColor: '#252525'  // Cor de fundo do gráfico
             }
         }
     });
