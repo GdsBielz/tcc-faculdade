@@ -43,7 +43,10 @@ def raiz():
 def home():
     nomeUsuario = getUsername()
     usuario_id = session.get('user_id')
-    
+    metas = sqlSelectDict("SELECT * FROM metas WHERE usuario_id = %s LIMIT 3", (usuario_id,))
+    total_metas = len(metas)
+    metas_concluidas = sum(1 for meta in metas if meta['concluida'])
+    porcentagem_concluidas = round((metas_concluidas / total_metas * 100), 2) if total_metas > 0 else 0
     # Buscar dados do banco
     dados = sqlSelectDict("SELECT * FROM dadosmotoristas WHERE usuario_id = %s ORDER BY dataHora DESC", (usuario_id,))
     
@@ -124,6 +127,8 @@ def home():
         ultimos_lancamentos = ultimos_lancamentos[:4]
         historico_km = historico_km[:5]
         saldo_atual = f"{saldo_atual:,.2f}"
+    
+
 
     return render_template(
         "home.html",
@@ -132,16 +137,12 @@ def home():
         historico_km=historico_km,
         ultima_corrida=ultima_corrida,
         saldo_atual=saldo_atual,
-        situacao_atual=situacao_atual
+        situacao_atual=situacao_atual,
+        metas=metas, 
+        porcentagem=porcentagem_concluidas
     )
 
 
-
-@page.route("/caixa")
-@login_required
-def caixa():
-    nomeUsuario = getUsername()
-    return render_template("caixa.html", nomeUsuario=nomeUsuario)
 
 @page.route("/metas")
 @login_required
@@ -165,7 +166,7 @@ def add_meta():
     
     if descricao:
         sqlExecute("INSERT INTO metas (descricao, usuario_id, concluida) VALUES (%s, %s, %s)", (descricao, usuario_id, 0))
-    return redirect(url_for('page.metas'))
+    return redirect(request.referrer)
 
 @page.route('/update-meta/<int:id>', methods=['POST'])
 @login_required
@@ -180,14 +181,14 @@ def update_meta(id):
         else:
             concluida = 0
         sqlExecute("UPDATE metas SET concluida = %s WHERE idmeta = %s AND usuario_id = %s", (concluida, id, usuario_id))
-    return redirect(url_for('page.metas'))
+    return redirect(request.referrer)
 
 @page.route('/delete-meta/<int:id>', methods=['POST'])
 @login_required
 def delete_meta(id):
     usuario_id = session.get('user_id')
     sqlExecute("DELETE FROM metas WHERE idmeta = %s AND usuario_id = %s", (id, usuario_id))
-    return redirect(url_for('page.metas'))
+    return redirect(request.referrer)
 
 @page.route("/dashboard")
 @login_required
@@ -301,12 +302,6 @@ def conta():
     nomeUsuario = getUsername(completo=True)
     emailUsuario = session.get("user_email")
     return render_template("conta.html", nomeUsuario=nomeUsuario, emailUsuario = emailUsuario)
-
-@page.route("/configuracoes")
-@login_required
-def configuracoes():
-    nomeUsuario = getUsername(completo=True)
-    return render_template("configuracoes.html", nomeUsuario=nomeUsuario)
 
 @page.route("/landing-page")
 def landingPage():
