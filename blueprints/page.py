@@ -220,14 +220,16 @@ def dashboard():
             mes = -1  # Caso não haja data válida, ignore esse dado
 
         if tipoDado == 'corrida':
-            total_ganhos_bruto += valor  # Corridas geram ganhos brutos
-            total_ganhos_liquido += valor  # Podemos somar ao valor líquido aqui, caso não haja deduções
+            total_ganhos_bruto += valor
             if mes != -1:
-                corridas_mensais[mes] += 1  # Contabiliza a corrida no mês
-
+                corridas_mensais[mes] += 1
         elif tipoDado in categoria_valores:
-            categoria_valores[tipoDado] += valor  # Abastecimento e manutenção são gastos
-            total_gastos +=valor
+            categoria_valores[tipoDado] += valor
+            total_gastos += valor
+
+        # Recalcular o ganho líquido como sendo o bruto menos os gastos
+        total_ganhos_liquido = total_ganhos_bruto - total_gastos
+
     
     # Formatando os valores
     total_ganhos_bruto_formatado = f"R$ {total_ganhos_bruto:,.2f}"
